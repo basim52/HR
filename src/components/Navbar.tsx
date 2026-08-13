@@ -104,16 +104,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="font-semibold">{currentCurrency.symbol}</span>
               </button>
 
-              {/* Demo Reset */}
-              <button
-                onClick={onReloadDemo}
-                className="hidden sm:flex items-center gap-1 text-slate-300 hover:text-white bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 rounded-lg px-2 py-1.5 text-xs transition"
-                title="إعادة تحميل البيانات التجريبية"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>بيانات تجريبية</span>
-              </button>
-
               {/* Settings */}
               <button
                 onClick={onOpenSettings}

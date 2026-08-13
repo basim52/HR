@@ -20,192 +20,10 @@ const notify = () => {
   listeners.forEach((l) => l());
 };
 
-// Seed Demo Data
-export const getSeedDebts = (): Debt[] => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
+// Seed Demo Data - Returns empty arrays for clean default state
+export const getSeedDebts = (): Debt[] => [];
 
-  return [
-    {
-      id: 'debt_1',
-      type: 'i_owe', // دين عليك
-      personName: 'أحمد السعيد (شركة التقنية)',
-      personPhone: '0501234567',
-      totalAmount: 5000,
-      paidAmount: 2000,
-      dueDate: `${year}-${month}-28`,
-      createdDate: `${year}-01-10`,
-      status: 'partial',
-      notes: 'متبقي من أقساط أجهزة الكمبيوتر المكتبية',
-      payments: [
-        {
-          id: 'pay_1_1',
-          debtId: 'debt_1',
-          amount: 1000,
-          date: `${year}-${month}-02`,
-          notes: 'دفعة شهرية أُولى',
-        },
-        {
-          id: 'pay_1_2',
-          debtId: 'debt_1',
-          amount: 1000,
-          date: `${year}-${month}-10`,
-          notes: 'دفعة شهرية ثانية',
-        },
-      ],
-    },
-    {
-      id: 'debt_2',
-      type: 'owed_to_me', // دين لك
-      personName: 'خالد عبد الله',
-      personPhone: '0559876543',
-      totalAmount: 3500,
-      paidAmount: 1500,
-      dueDate: `${year}-${month}-20`,
-      createdDate: `${year}-02-15`,
-      status: 'partial',
-      notes: 'قرض شخصي للمساعدة في صيانة السيارة',
-      payments: [
-        {
-          id: 'pay_2_1',
-          debtId: 'debt_2',
-          amount: 1500,
-          date: `${year}-${month}-05`,
-          notes: 'سداد تحويل بنكي',
-        },
-      ],
-    },
-    {
-      id: 'debt_3',
-      type: 'i_owe',
-      personName: 'المهندس ياسر الراشد',
-      personPhone: '0541112233',
-      totalAmount: 1200,
-      paidAmount: 0,
-      dueDate: `${year}-${month}-15`,
-      createdDate: `${year}-03-01`,
-      status: 'pending',
-      notes: 'تكاليف استشارة هندسية',
-      payments: [],
-    },
-    {
-      id: 'debt_4',
-      type: 'owed_to_me',
-      personName: 'فهد العتيبي',
-      personPhone: '0567778899',
-      totalAmount: 2500,
-      paidAmount: 2500,
-      dueDate: `${year}-${month}-01`,
-      createdDate: `${year}-01-05`,
-      status: 'paid',
-      notes: 'سداد كامل المبلغ شكراً له',
-      payments: [
-        {
-          id: 'pay_4_1',
-          debtId: 'debt_4',
-          amount: 2500,
-          date: `${year}-${month}-01`,
-          notes: 'تسوية نهائية نقداً',
-        },
-      ],
-    },
-  ];
-};
-
-export const getSeedTransactions = (): Transaction[] => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-
-  return [
-    {
-      id: 'tx_1',
-      type: 'income',
-      amount: 14500,
-      category: 'salary',
-      title: 'الراتب الشهري الأساسي',
-      date: `${year}-${month}-01`,
-      paymentMethod: 'bank_transfer',
-      notes: 'إيداع راتب الشهر',
-    },
-    {
-      id: 'tx_2',
-      type: 'expense',
-      amount: 3200,
-      category: 'housing',
-      title: 'إيجار الشقة السكني',
-      date: `${year}-${month}-02`,
-      paymentMethod: 'bank_transfer',
-      notes: 'دفعة الإيجار الشهرية',
-    },
-    {
-      id: 'tx_3',
-      type: 'expense',
-      amount: 450,
-      category: 'bills',
-      title: 'فاتورة الكهرباء والماء',
-      date: `${year}-${month}-05`,
-      paymentMethod: 'card',
-      notes: 'سداد عبر مدى',
-    },
-    {
-      id: 'tx_4',
-      type: 'expense',
-      amount: 1150,
-      category: 'food',
-      title: 'مشتريات السوبرماركت والمواد الغذائية',
-      date: `${year}-${month}-08`,
-      paymentMethod: 'card',
-    },
-    {
-      id: 'tx_5',
-      type: 'expense',
-      amount: 600,
-      category: 'transport',
-      title: 'وقود السيارة وصيانة دورية',
-      date: `${year}-${month}-10`,
-      paymentMethod: 'cash',
-    },
-    {
-      id: 'tx_6',
-      type: 'expense',
-      amount: 350,
-      category: 'shopping',
-      title: 'ملابس واحتياجات شخصية',
-      date: `${year}-${month}-12`,
-      paymentMethod: 'card',
-    },
-    {
-      id: 'tx_7',
-      type: 'income',
-      amount: 1800,
-      category: 'investment',
-      title: 'أرباح مشروع جانبي / استشارات',
-      date: `${year}-${month}-11`,
-      paymentMethod: 'bank_transfer',
-    },
-    {
-      id: 'tx_8',
-      type: 'expense',
-      amount: 1000,
-      category: 'debt',
-      title: 'دفعة سداد دين (شركة التقنية)',
-      date: `${year}-${month}-10`,
-      paymentMethod: 'bank_transfer',
-      notes: 'مرتبطة بالدين المسجل',
-    },
-    {
-      id: 'tx_9',
-      type: 'expense',
-      amount: 280,
-      category: 'entertainment',
-      title: 'عشاء مع العائلة وسينما',
-      date: `${year}-${month}-13`,
-      paymentMethod: 'card',
-    },
-  ];
-};
+export const getSeedTransactions = (): Transaction[] => [];
 
 export const getSeedBudgets = (): CategoryBudget[] => {
   return CATEGORIES.map((c) => ({
@@ -221,18 +39,28 @@ export const getSeedSettings = (): UserSettings => ({
   payoffStrategy: 'snowball',
 });
 
+// Helper to ensure clean state on initial load
+const ensureCleanInitialState = () => {
+  if (typeof localStorage === 'undefined') return;
+  if (!localStorage.getItem('debt_app_cleaned_default_v1')) {
+    localStorage.setItem(DEBTS_KEY, JSON.stringify([]));
+    localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify([]));
+    localStorage.setItem('debt_app_cleaned_default_v1', 'true');
+  }
+};
+
 // Getter / Storage Methods
 export const getDebts = (): Debt[] => {
   try {
+    ensureCleanInitialState();
     const data = localStorage.getItem(DEBTS_KEY);
     if (!data) {
-      const seeds = getSeedDebts();
-      localStorage.setItem(DEBTS_KEY, JSON.stringify(seeds));
-      return seeds;
+      localStorage.setItem(DEBTS_KEY, JSON.stringify([]));
+      return [];
     }
     return JSON.parse(data);
   } catch (e) {
-    return getSeedDebts();
+    return [];
   }
 };
 
@@ -243,15 +71,15 @@ export const saveDebts = (debts: Debt[]) => {
 
 export const getTransactions = (): Transaction[] => {
   try {
+    ensureCleanInitialState();
     const data = localStorage.getItem(TRANSACTIONS_KEY);
     if (!data) {
-      const seeds = getSeedTransactions();
-      localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(seeds));
-      return seeds;
+      localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify([]));
+      return [];
     }
     return JSON.parse(data);
   } catch (e) {
-    return getSeedTransactions();
+    return [];
   }
 };
 

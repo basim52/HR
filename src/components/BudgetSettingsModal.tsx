@@ -177,33 +177,19 @@ export const BudgetSettingsModal: React.FC<BudgetSettingsModalProps> = ({
             </label>
           </div>
 
-          <div className="flex items-center gap-2 pt-2">
+          <div className="pt-2">
             <button
               type="button"
               onClick={() => {
-                if (confirm('هل تريد إعادة تعيين البيانات التجريبية الشاملة؟')) {
-                  reloadDemoData();
-                  onClose();
-                }
-              }}
-              className="flex-1 p-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>استعادة البيانات التجريبية</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                if (confirm('هل تريد مسح كافة البيانات المسجلة نهائياً؟')) {
+                if (confirm('هل تريد مسح كافة البيانات المسجلة نهائياً والبدء بسجل فارغ؟')) {
                   clearAllData();
                   onClose();
                 }
               }}
-              className="p-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition"
-              title="مسح الكل"
+              className="w-full p-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition"
             >
               <Trash2 className="w-4 h-4" />
+              <span>مسح كافة السجلات والبيانات</span>
             </button>
           </div>
         </div>

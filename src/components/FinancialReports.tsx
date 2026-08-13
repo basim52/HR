@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { toPng } from 'html-to-image';
 import {
   PieChart as PieIcon,
   BarChart2,
   Printer,
-  Download,
   Calendar,
   CheckCircle2,
   Coins,
   TrendingDown,
   TrendingUp,
   FileSpreadsheet,
+  Image as ImageIcon,
+  Loader2,
 } from 'lucide-react';
 import {
   PieChart,
@@ -110,8 +112,63 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
     .filter((d) => d.type === 'i_owe')
     .reduce((acc, d) => acc + (d.totalAmount - d.paidAmount), 0);
 
+  const reportRef = useRef<HTMLDivElement>(null);
+  const [isExporting, setIsExporting] = useState<boolean>(false);
+
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleExportImage = async () => {
+    if (!reportRef.current) return;
+    try {
+      setIsExporting(true);
+      // 1. Generate PNG data url with html-to-image
+      const dataUrl = await toPng(reportRef.current, {
+        cacheBust: true,
+        backgroundColor: '#f8fafc',
+        pixelRatio: 2,
+        fontEmbedCSS: '',
+        skipFonts: true,
+      });
+
+      // 2. Load into HTML Image
+      const img = new Image();
+      img.src = dataUrl;
+      await new Promise((resolve) => {
+        img.onload = resolve;
+      });
+
+      // 3. Create square canvas based on max dimension + padding
+      const padding = 40; // extra padding around the square
+      const maxDim = Math.max(img.width, img.height) + padding * 2;
+      const canvas = document.createElement('canvas');
+      canvas.width = maxDim;
+      canvas.height = maxDim;
+      const ctx = canvas.getContext('2d');
+
+      if (ctx) {
+        // Fill background color
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(0, 0, maxDim, maxDim);
+
+        // Draw image centered in the square canvas
+        const offsetX = (maxDim - img.width) / 2;
+        const offsetY = (maxDim - img.height) / 2;
+        ctx.drawImage(img, offsetX, offsetY);
+      }
+
+      // 4. Download final square image
+      const squareDataUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = `تقرير_مالي_مربع_${selectedReportMonth}.png`;
+      link.href = squareDataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Export image error:', err);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
@@ -124,17 +181,22 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
             <span>التقارير والتحليلات المالية الدقيقة</span>
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            رسومات بيانية دقيقة لتوزيع المصاريف والتدفق النقدي مع خيارات الطباعة والتصدير
+            رسومات بيانية دقيقة لتوزيع المصاريف والتدفق النقدي مع خيارات الطباعة والتصدير كصورة
           </p>
         </div>
 
         <div className="flex items-center gap-2 w-full md:w-auto">
           <button
-            onClick={() => exportTransactionsCSV(monthTxs, settings.currencySymbol)}
-            className="flex-1 md:flex-initial flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-medium px-4 py-2.5 rounded-lg shadow-xs transition text-xs sm:text-sm"
+            onClick={handleExportImage}
+            disabled={isExporting}
+            className="flex-1 md:flex-initial flex items-center justify-center gap-2 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 font-medium px-4 py-2.5 rounded-lg shadow-xs transition text-xs sm:text-sm disabled:opacity-50"
           >
-            <Download className="w-4 h-4 text-slate-500" />
-            <span>تصدير CSV</span>
+            {isExporting ? (
+              <Loader2 className="w-4 h-4 animate-spin text-indigo-600" />
+            ) : (
+              <ImageIcon className="w-4 h-4 text-indigo-600" />
+            )}
+            <span>{isExporting ? 'جاري إنشاء الصورة...' : 'تصدير كصورة'}</span>
           </button>
           <button
             onClick={handlePrint}
@@ -146,7 +208,9 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
         </div>
       </div>
 
-      {/* Report Filter & Month Header */}
+      {/* Exportable Report Content Wrapper */}
+      <div ref={reportRef} className="space-y-6 bg-slate-50/50 p-2 sm:p-4 rounded-2xl">
+        {/* Report Filter & Month Header */}
       <div className="bg-slate-900 text-white p-6 rounded-xl border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Calendar className="w-5 h-5 text-indigo-400" />
@@ -360,6 +424,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
             </tbody>
           </table>
         </div>
+      </div>
       </div>
     </div>
   );
