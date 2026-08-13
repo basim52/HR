@@ -16,7 +16,7 @@ export const CATEGORIES: CategoryDef[] = [
     icon: 'Utensils',
     color: '#ef4444',
     bgLight: 'bg-red-50 text-red-600 border-red-200',
-    defaultLimit: 1500,
+    defaultLimit: 0,
   },
   {
     id: 'housing',
@@ -25,7 +25,7 @@ export const CATEGORIES: CategoryDef[] = [
     icon: 'Home',
     color: '#3b82f6',
     bgLight: 'bg-blue-50 text-blue-600 border-blue-200',
-    defaultLimit: 3000,
+    defaultLimit: 0,
   },
   {
     id: 'bills',
@@ -34,7 +34,7 @@ export const CATEGORIES: CategoryDef[] = [
     icon: 'Zap',
     color: '#f59e0b',
     bgLight: 'bg-amber-50 text-amber-600 border-amber-200',
-    defaultLimit: 800,
+    defaultLimit: 0,
   },
   {
     id: 'transport',
@@ -43,7 +43,7 @@ export const CATEGORIES: CategoryDef[] = [
     icon: 'Car',
     color: '#10b981',
     bgLight: 'bg-emerald-50 text-emerald-600 border-emerald-200',
-    defaultLimit: 1000,
+    defaultLimit: 0,
   },
   {
     id: 'health',
@@ -52,7 +52,7 @@ export const CATEGORIES: CategoryDef[] = [
     icon: 'HeartPulse',
     color: '#ec4899',
     bgLight: 'bg-pink-50 text-pink-600 border-pink-200',
-    defaultLimit: 500,
+    defaultLimit: 0,
   },
   {
     id: 'shopping',
@@ -61,7 +61,7 @@ export const CATEGORIES: CategoryDef[] = [
     icon: 'ShoppingBag',
     color: '#8b5cf6',
     bgLight: 'bg-purple-50 text-purple-600 border-purple-200',
-    defaultLimit: 1200,
+    defaultLimit: 0,
   },
   {
     id: 'entertainment',
@@ -70,7 +70,7 @@ export const CATEGORIES: CategoryDef[] = [
     icon: 'Tv',
     color: '#06b6d4',
     bgLight: 'bg-cyan-50 text-cyan-600 border-cyan-200',
-    defaultLimit: 700,
+    defaultLimit: 0,
   },
   {
     id: 'education',
@@ -79,7 +79,7 @@ export const CATEGORIES: CategoryDef[] = [
     icon: 'GraduationCap',
     color: '#6366f1',
     bgLight: 'bg-indigo-50 text-indigo-600 border-indigo-200',
-    defaultLimit: 1000,
+    defaultLimit: 0,
   },
   {
     id: 'salary',
@@ -115,7 +115,7 @@ export const CATEGORIES: CategoryDef[] = [
     icon: 'MoreHorizontal',
     color: '#64748b',
     bgLight: 'bg-slate-50 text-slate-600 border-slate-200',
-    defaultLimit: 500,
+    defaultLimit: 0,
   },
 ];
 
@@ -128,7 +128,7 @@ export const getCategoryById = (id: string): CategoryDef => {
       icon: 'MoreHorizontal',
       color: '#64748b',
       bgLight: 'bg-slate-50 text-slate-600 border-slate-200',
-      defaultLimit: 500,
+      defaultLimit: 0,
     }
   );
 };

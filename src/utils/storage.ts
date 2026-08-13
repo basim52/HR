@@ -28,24 +28,31 @@ export const getSeedTransactions = (): Transaction[] => [];
 export const getSeedBudgets = (): CategoryBudget[] => {
   return CATEGORIES.map((c) => ({
     categoryId: c.id,
-    monthlyLimit: c.defaultLimit,
+    monthlyLimit: 0,
   }));
 };
 
 export const getSeedSettings = (): UserSettings => ({
   currencyCode: 'SAR',
   currencySymbol: 'ر.س',
-  monthlyBudgetGoal: 10000,
+  monthlyBudgetGoal: 0,
   payoffStrategy: 'snowball',
 });
 
-// Helper to ensure clean state on initial load
+// Helper to ensure initial storage keys exist without overwriting user data
 const ensureCleanInitialState = () => {
   if (typeof localStorage === 'undefined') return;
-  if (!localStorage.getItem('debt_app_cleaned_default_v1')) {
+  if (localStorage.getItem(DEBTS_KEY) === null) {
     localStorage.setItem(DEBTS_KEY, JSON.stringify([]));
+  }
+  if (localStorage.getItem(TRANSACTIONS_KEY) === null) {
     localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify([]));
-    localStorage.setItem('debt_app_cleaned_default_v1', 'true');
+  }
+  if (localStorage.getItem(BUDGETS_KEY) === null) {
+    localStorage.setItem(BUDGETS_KEY, JSON.stringify(getSeedBudgets()));
+  }
+  if (localStorage.getItem(SETTINGS_KEY) === null) {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(getSeedSettings()));
   }
 };
 
@@ -90,6 +97,7 @@ export const saveTransactions = (txs: Transaction[]) => {
 
 export const getBudgets = (): CategoryBudget[] => {
   try {
+    ensureCleanInitialState();
     const data = localStorage.getItem(BUDGETS_KEY);
     if (!data) {
       const seeds = getSeedBudgets();
@@ -109,6 +117,7 @@ export const saveBudgets = (budgets: CategoryBudget[]) => {
 
 export const getSettings = (): UserSettings => {
   try {
+    ensureCleanInitialState();
     const data = localStorage.getItem(SETTINGS_KEY);
     if (!data) {
       const seeds = getSeedSettings();
@@ -131,7 +140,7 @@ export const addDebt = (debt: Omit<Debt, 'id' | 'paidAmount' | 'status' | 'payme
   const debts = getDebts();
   const newDebt: Debt = {
     ...debt,
-    id: 'debt_' + Date.now(),
+    id: 'debt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
     paidAmount: 0,
     status: 'pending',
     payments: [],
@@ -163,7 +172,7 @@ export const recordDebtPayment = (
 
   const paymentDate = date || new Date().toISOString().split('T')[0];
   const newPayment: DebtPayment = {
-    id: 'pay_' + Date.now(),
+    id: 'pay_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
     debtId,
     amount,
     date: paymentDate,
@@ -182,7 +191,7 @@ export const recordDebtPayment = (
 
   const updatedDebt: Debt = {
     ...debt,
-    paidAmount: Math.min(totalPaid, debt.totalAmount),
+    paidAmount: totalPaid,
     status: newStatus,
     payments: updatedPayments,
   };
@@ -198,7 +207,7 @@ export const recordDebtPayment = (
       title: `سداد دين: ${debt.personName}`,
       date: paymentDate,
       paymentMethod: 'bank_transfer',
-      notes: notes || `سداد جزئي للدين رقم ${debt.id}`,
+      notes: notes || `سداد للدين`,
     });
   } else if (debt.type === 'owed_to_me') {
     addTransaction({
@@ -218,7 +227,7 @@ export const addTransaction = (tx: Omit<Transaction, 'id'>) => {
   const txs = getTransactions();
   const newTx: Transaction = {
     ...tx,
-    id: 'tx_' + Date.now(),
+    id: 'tx_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
   };
   saveTransactions([newTx, ...txs]);
   return newTx;
