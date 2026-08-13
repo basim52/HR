@@ -1,0 +1,6 @@
+{
+  "name": "تتبع الديون والمصاريف الشهري",
+  "description": "تطبيق شامل لإدارة الديون (لك وعليك) وتتبع المصاريف والدخل الشهري والميزانيات مع تقارير مالية دقيقة وتحليلات ذكية.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
